@@ -23,19 +23,24 @@ the following programs & tools are included and enabled by default:
 # usage
 you can call the installed programs directly from the image
 
+### image location/names
+the image is available from the following repositories:
+- dockerhub: `ops4you/ciborg`
+- gitlab: `registry.gitlab.com/ops4you/ciborg`
+
 ### use ansible
 ```bash
-docker run --rm -it docker4prime/ciborg ansible --version
-docker run --rm -it docker4prime/ciborg ansible-playbook --version
+docker run --rm -it <IMAGE-NAME> ansible --version
+docker run --rm -it <IMAGE-NAME> ansible-playbook --version
 ```
 
 ### use apache benchmark
 ```bash
-docker run --rm -it docker4prime/ciborg ab -V
-docker run --rm -it docker4prime/ciborg ab -n 10 -c 2 https://google.com/ | grep "Time per request:.*across all concurrent requests" | sed "s/.*: *\([0-9]*\)\..*/\1/"
+docker run --rm -it <IMAGE-NAME> ab -V
+docker run --rm -it <IMAGE-NAME> ab -n 10 -c 2 https://google.com/ | grep "Time per request:.*across all concurrent requests" | sed "s/.*: *\([0-9]*\)\..*/\1/"
 ```
 
 ### use goss
 ```bash
-docker run --rm -it docker4prime/ciborg goss --version
+docker run --rm -it <IMAGE-NAME> goss --version
 ```
