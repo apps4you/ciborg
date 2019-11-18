@@ -21,7 +21,7 @@ before_script:
 
 # build docker image
 docker_image:
-  stage: BUILD
+  stage: build
   image: docker:latest
   services:
     - docker:dind
