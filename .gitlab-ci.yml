@@ -4,8 +4,10 @@
 # LOCAL VARIABLES
 # ==================
 variables:
-  # defining dockerhub image name
-  DOCKER_HUB_IMAGE: "ops4you/${CI_PROJECT_NAME}"
+  # local image name (on gitlab)
+  GITLAB_IMAGE_NAME: "${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}"
+  # image name on docker hub
+  DOCKER_IMAGE_NAME: "ops4you/${CI_PROJECT_NAME}"
 
 
 # COMMON PREPARATION TASKS
@@ -20,13 +22,27 @@ before_script:
 # ==================
 
 # build docker image
-docker_image:
+gitlab_image:
   stage: build
   image: docker:latest
   services:
     - docker:dind
   script:
-    - sh build.sh
+    # build image
+    - docker build -t ${GITLAB_IMAGE_NAME} .
+    # push to local registry
+    - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
+    - docker push ${GITLAB_IMAGE_NAME}
+  tags:
+    - docker
+
+# test docker image
+run_tests:
+  stage: test
+  image: ${GITLAB_IMAGE_NAME}
+  script:
+    # run test script
+    - /tests/test.sh
   tags:
     - docker
 
