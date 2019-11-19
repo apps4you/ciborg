@@ -9,6 +9,7 @@ the following programs & tools are included and enabled by default:
 - bash
 - curl
 - git
+- httpie
 - monit
 - python3
 
@@ -18,6 +19,7 @@ the following programs & tools are included and enabled by default:
 
 ### EXTERNAL tools
 - goss testing framework (https://github.com/aelsabbahy/goss)
+- hey program that sends some load to a web application (https://github.com/rakyll/hey)
 
 
 # usage

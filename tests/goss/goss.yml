@@ -14,9 +14,15 @@ command:
     exit-status: 0
   curl --version:
     exit-status: 0
+  git --version:
+    exit-status: 0
   goss --version:
     exit-status: 0
-  git --version:
+  hey -n 1 -c 1 -t 5 https://1.1.1.1:
+    exit-status: 0
+    stdout:
+    - Requests/sec
+  http --version:
     exit-status: 0
   monit -V:
     exit-status: 0

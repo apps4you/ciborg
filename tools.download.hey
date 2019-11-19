@@ -1,0 +1,26 @@
+#!/bin/bash
+# download latest hey release
+# - variables set here can be overriden through build/environment variables
+toolname='hey'
+
+# exit on error(s)
+set -e
+
+# -- base download url
+[[ -z "$HEY_BASEURL" ]] && HEY_BASEURL="https://storage.googleapis.com/hey-release"
+download_url="${HEY_BASEURL}/hey_$(uname -s|tr '[:upper:]' '[:lower:]')_amd64"
+
+
+# -- download & install to bin location
+[[ -n "${TARGET_DIR}" ]] && target_dir="${TARGET_DIR}" || target_dir="."
+if [[ -n "${download_url}" ]];then
+  echo "[${toolname}] DOWNLOADING from ${download_url} ..."
+  tmppath=/tmp/download.bin
+  curl -ksL "${download_url}" -o ${target_dir}/${toolname}
+  [[ -x ${target_dir}/${toolname} ]] || chmod +x ${target_dir}/${toolname}
+  echo -n "[$toolname] TESTING current version ... "
+  ${target_dir}/${toolname} -n 1 -c 1 -t 5 "https://1.1.1.1" | grep "Requests/sec"
+fi
+
+
+# eof

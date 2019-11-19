@@ -10,13 +10,17 @@ python3
 tidyhtml
 tzdata
 
+# build dependencies
+py3-cryptography
+
+
 # required utilities
 openssh-client
 unzip
 
 # application packages
-ansible
 apache2-utils
+httpie
 monit
 
 

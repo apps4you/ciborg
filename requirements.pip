@@ -4,7 +4,7 @@
 # ===============
 # MAIN MODULES
 # ===============
-# -- fix to latest ansible version withint major release
+# -- fix to latest ansible version within major release
 ansible>=2.8,<2.9
 
 
