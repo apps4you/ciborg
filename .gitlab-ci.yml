@@ -96,9 +96,9 @@ docker_tagged:
     - docker pull ${GITLAB_IMAGE_NAME}:build
     # tag & push to registry
     - docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASS}
-    - docker tag  ${GITLAB_IMAGE_NAME}:build ${DOCKER_HUB_IMAGE}:${CI_COMMIT_REF_NAME}
-    - docker push ${DOCKER_HUB_IMAGE}:${CI_COMMIT_REF_NAME}
-    - echo "[i] docker image has been pushed to ${DOCKER_HUB_IMAGE}:${CI_COMMIT_REF_NAME}"
+    - docker tag  ${GITLAB_IMAGE_NAME}:build ${DOCKER_IMAGE_NAME}:${CI_COMMIT_REF_NAME}
+    - docker push ${DOCKER_IMAGE_NAME}:${CI_COMMIT_REF_NAME}
+    - echo "[i] docker image has been pushed to ${DOCKER_IMAGE_NAME}:${CI_COMMIT_REF_NAME}"
   only:
     - tags
   tags:
@@ -114,9 +114,9 @@ docker_latest:
     - docker pull ${GITLAB_IMAGE_NAME}:build
     # tag & push to registry
     - docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASS}
-    - docker tag  ${GITLAB_IMAGE_NAME}:build ${DOCKER_HUB_IMAGE}:latest
-    - docker push ${DOCKER_HUB_IMAGE}:latest
-    - echo "[i] docker image has been pushed to ${DOCKER_HUB_IMAGE}:latest"
+    - docker tag  ${GITLAB_IMAGE_NAME}:build ${DOCKER_IMAGE_NAME}:latest
+    - docker push ${DOCKER_IMAGE_NAME}:latest
+    - echo "[i] docker image has been pushed to ${DOCKER_IMAGE_NAME}:latest"
   only:
     - master
   tags:
