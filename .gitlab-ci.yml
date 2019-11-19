@@ -5,7 +5,7 @@
 # ==================
 variables:
   # local image name (on gitlab)
-  GITLAB_IMAGE_NAME: "${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}"
+  GITLAB_IMAGE_NAME: "${CI_REGISTRY_IMAGE}"
   # image name on docker hub
   DOCKER_IMAGE_NAME: "ops4you/${CI_PROJECT_NAME}"
 
@@ -29,22 +29,59 @@ gitlab_image:
     - docker:dind
   script:
     # build image
-    - docker build -t ${GITLAB_IMAGE_NAME} .
+    - docker build -t ${GITLAB_IMAGE_NAME}:build .
     # push to local registry
     - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
-    - docker push ${GITLAB_IMAGE_NAME}
+    - docker push ${GITLAB_IMAGE_NAME}:build
   tags:
     - docker
 
 # test docker image
 run_tests:
   stage: test
-  image: ${GITLAB_IMAGE_NAME}
+  image: ${GITLAB_IMAGE_NAME}:build
   script:
     # run test script
     - /tests/test.sh
   tags:
     - docker
 
+
+# push tagged image to gitlab
+gitlab_tagged:
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
+    # pull build image first
+    - docker pull ${GITLAB_IMAGE_NAME}:build
+    # tag & push to registry
+    - docker tag  ${GITLAB_IMAGE_NAME}:build ${GITLAB_IMAGE_NAME}:${CI_COMMIT_REF_NAME}
+    - docker push ${GITLAB_IMAGE_NAME}:${CI_COMMIT_REF_NAME}
+    - echo "[i] docker image has been pushed to ${GITLAB_IMAGE_NAME}:${CI_COMMIT_REF_NAME}"
+  only:
+    - tags
+  tags:
+    - docker
+
+gitlab_latest:
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
+    # pull build image first
+    - docker pull ${GITLAB_IMAGE_NAME}:build
+    # tag & push to registry
+    - docker tag  ${GITLAB_IMAGE_NAME}:build ${GITLAB_IMAGE_NAME}:latest
+    - docker push ${GITLAB_IMAGE_NAME}:latest
+    - echo "[i] docker image has been pushed to ${GITLAB_IMAGE_NAME}:latest"
+  only:
+    - master
+  tags:
+    - docker
 
 # eof
