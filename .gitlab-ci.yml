@@ -29,7 +29,7 @@ gitlab_image:
     - docker:dind
   script:
     # build image
-    - docker build -t ${GITLAB_IMAGE_NAME}:build .
+    - docker build --no-cache --build-arg APP_VERSION=${CI_COMMIT_REF_NAME} --tag ${GITLAB_IMAGE_NAME}:build .
     # push to local registry
     - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
     - docker push ${GITLAB_IMAGE_NAME}:build
@@ -43,6 +43,15 @@ run_tests:
   script:
     # run test script
     - /tests/test.sh
+  tags:
+    - docker
+
+# show image version
+show_version:
+  stage: test
+  image: ${GITLAB_IMAGE_NAME}:build
+  script:
+    - version
   tags:
     - docker
 

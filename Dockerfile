@@ -48,6 +48,8 @@ RUN apk add --no-cache $(grep -vE "^(#.*|$)" requirements.pkg) \
   && for external_tool in $(grep -vE "^(#.*|$)" requirements.tools); do bash tools.download.${external_tool};echo;sleep 2;done \
   && addgroup -g 1000 ${APP_USER} \
   && adduser  -u 1000 -G ${APP_USER} -s /bin/bash -D ${APP_USER} \
+  && echo -e '#!/bin/sh'"\necho \"${APP_NAME} v${APP_VERSION} (built on $(date -R))\"" >/usr/local/bin/version \
+  && chmod +x /usr/local/bin/version \
   && mkdir -p ${APP_PATH} \
   && chown ${APP_USER}: ${APP_PATH}
 
