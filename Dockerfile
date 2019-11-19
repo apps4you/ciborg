@@ -17,10 +17,16 @@ ENV APP_NAME ${APP_NAME}
 # APP base path
 ARG APP_PATH="/project"
 ENV APP_PATH ${APP_PATH}
+# APP user
+ARG APP_USER="ci"
+ENV APP_USER ${APP_USER}
+# APP version
+ARG APP_VERSION="1.0"
+ENV APP_VERSION ${APP_VERSION}
 
 # -- set SYS environments
 # prompt
-ENV PS1='[ciborg] \h:\w\$ '
+ENV PS1='['${APP_NAME}-${APP_VERSION}'] \h:\w\$ '
 
 # timezone
 ARG TZ="Europe/Vienna"
@@ -30,6 +36,7 @@ ENV TZ ${TZ}
 COPY . /tmp/
 WORKDIR /tmp
 
+
 # setup application dependencies
 RUN apk add --no-cache $(grep -vE "^(#.*|$)" requirements.pkg) \
   && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
@@ -38,13 +45,20 @@ RUN apk add --no-cache $(grep -vE "^(#.*|$)" requirements.pkg) \
   && pip install --upgrade -r requirements.pip \
   && export TARGET_DIR=/usr/local/bin \
   && ansible-playbook -e "APP_PATH=${APP_PATH}" requirements.yaml \
-  && for external_tool in $(grep -vE "^(#.*|$)" requirements.tools); do bash tools.download.${external_tool};echo;sleep 2;done
+  && for external_tool in $(grep -vE "^(#.*|$)" requirements.tools); do bash tools.download.${external_tool};echo;sleep 2;done \
+  && addgroup -g 1000 ${APP_USER} \
+  && adduser  -u 1000 -G ${APP_USER} -s /bin/bash -D ${APP_USER} \
+  && mkdir -p ${APP_PATH} \
+  && chown ${APP_USER}: ${APP_PATH}
 
 # adding test files
 COPY tests /tests/
 
 # switch to application dir
 WORKDIR ${APP_PATH}
+
+# switch to application user
+USER ${APP_USER}
 
 # define application dir as volume
 VOLUME ${APP_PATH}

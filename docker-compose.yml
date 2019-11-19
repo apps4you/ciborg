@@ -1,0 +1,36 @@
+# PURPOSE: default compose file for development and local tests
+# USAGE: docker-compose build
+#        docker-compose run shell
+#        docker-compose run tests
+
+# compose version
+# ===================
+version: "3.5"
+
+
+# service definitions
+# ===================
+services:
+
+  # run an interactive bash session
+  shell:
+    image: ops4you/ciborg
+    build: .
+    # set dev specific environment
+    environment:
+      STAGE_NAME: "test"
+    # map project dir
+    volumes:
+      - ${PWD}:/project
+    # use bash
+    entrypoint: '/bin/bash'
+
+  # run tests
+  tests:
+    image: ops4you/ciborg
+    build: .
+    # set dev specific environment
+    environment:
+      STAGE_NAME: "test"
+    # use bash
+    entrypoint: '/tests/test.sh'

@@ -1,4 +1,4 @@
-# PURPOSE: compose file for automated build tests
+# PURPOSE: compose file for automated tests
 sut:
   build: .
   command: /tests/test.sh
