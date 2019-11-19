@@ -84,4 +84,42 @@ gitlab_latest:
   tags:
     - docker
 
+
+# push tagged image to docker hub
+docker_tagged:
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    # pull build image first
+    - docker pull ${GITLAB_IMAGE_NAME}:build
+    # tag & push to registry
+    - docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASS}
+    - docker tag  ${GITLAB_IMAGE_NAME}:build ${DOCKER_HUB_IMAGE}:${CI_COMMIT_REF_NAME}
+    - docker push ${DOCKER_HUB_IMAGE}:${CI_COMMIT_REF_NAME}
+    - echo "[i] docker image has been pushed to ${DOCKER_HUB_IMAGE}:${CI_COMMIT_REF_NAME}"
+  only:
+    - tags
+  tags:
+    - docker
+
+docker_latest:
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    # pull build image first
+    - docker pull ${GITLAB_IMAGE_NAME}:build
+    # tag & push to registry
+    - docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASS}
+    - docker tag  ${GITLAB_IMAGE_NAME}:build ${DOCKER_HUB_IMAGE}:latest
+    - docker push ${DOCKER_HUB_IMAGE}:latest
+    - echo "[i] docker image has been pushed to ${DOCKER_HUB_IMAGE}:latest"
+  only:
+    - master
+  tags:
+    - docker
+
 # eof
