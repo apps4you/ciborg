@@ -5,7 +5,7 @@
 # MAIN MODULES
 # ===============
 # -- fix to latest ansible version within major release
-ansible>=2.8,<2.9
+ansible>=2.9,<2.10
 
 
 # ===============
@@ -15,6 +15,7 @@ ansible>=2.8,<2.9
 dnspython
 
 # -- other modules that may be useful
+bcrypt
 passlib>=1.6
 
 # -- modules required for fact caching
@@ -27,17 +28,21 @@ passlib>=1.6
 # -- modules required by docker cloud modules
 docker
 
-# -- modules required by digital ocean cloud modules
-#dopy
+# -- modules required by azure cloud modules
+azure >= 2.0.0
 
 # -- modules required by aws cloud modules
-#boto
-#boto3
+boto
+boto3
+botocore
 
-# -- modules required by proxmox api
-#proxmoxer
+# -- modules required by digital ocean cloud modules
+dopy
+
+# -- modules required by hetzner cloud modules
+hcloud-python
 
 # -- modules required by vmware cloud modules
-#pyvmomi
+pyvmomi
 
 # eof

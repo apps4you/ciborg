@@ -28,7 +28,7 @@ you can call the installed programs directly from the image
 ### image location/names
 the image is available from the following repositories:
 - dockerhub: `ops4you/ciborg`
-- gitlab: `registry.gitlab.com/ops4you/ciborg`
+- gitlab: `registry.gitlab.com/ops4you/tools/ciborg`
 
 ### use ansible
 ```bash
