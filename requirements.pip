@@ -39,7 +39,7 @@ botocore
 dopy
 
 # -- modules required by hetzner cloud modules
-hcloud-python
+hcloud
 
 # -- modules required by vmware cloud modules
 pyvmomi
