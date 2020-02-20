@@ -15,7 +15,6 @@ ansible>=2.9,<2.10
 dnspython
 
 # -- other modules that may be useful
-bcrypt
 passlib>=1.6
 
 # -- modules required for fact caching

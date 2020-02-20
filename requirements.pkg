@@ -12,6 +12,7 @@ tidyhtml
 tzdata
 
 # build dependencies
+py3-bcrypt
 py3-cryptography
 
 
