@@ -6,7 +6,7 @@
 # build production image (final stage)
 # ====================================
 # base image
-FROM alpine
+FROM alpine:3.9
 MAINTAINER Fidy Andrianaivo (fidy@andrianaivo.org)
 LABEL Description="ciborg base image"
 
